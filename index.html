@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Career Planner</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles for Inter font and Print -->
+    <style>
+        /* Apply Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom Print Styles */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 11pt;
+                color: #000;
+            }
+
+            /* Hide all buttons and non-essential UI */
+            .print-hidden {
+                display: none;
+            }
+
+            /* Ensure main content fills the page */
+            .print-container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+            }
+            
+            /* Add page breaks before major sections for cleaner PDF output */
+            .print-section {
+                break-before: page;
+                margin-top: 1.5rem; /* Add some space at the top of new pages */
+            }
+            
+            /* Ensure inputs and textareas look good and show content */
+            textarea,
+            input[type="text"] {
+                border: 1px solid #ccc !important;
+                background-color: #fdfdfd !important;
+                color: #000 !important;
+                padding: 8px !important;
+                /* Ensure textareas show their full content */
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            /* Style for checkboxes: Only show the ones that are checked */
+            input[type="checkbox"] {
+                display: none; /* Hide the box itself */
+            }
+
+            /* Hide labels for unchecked items */
+            input[type="checkbox"]:not(:checked) + label {
+                display: none;
+            }
+
+            /* Style labels for checked items to make them clear */
+            input[type="checkbox"]:checked + label {
+                display: inline-block;
+                padding: 4px 8px;
+                background-color: #e5e7eb !important; /* Light gray background */
+                border: 1px solid #9ca3af !important;
+                border-radius: 4px;
+                color: #000 !important;
+                font-weight: 500;
+                margin-bottom: 4px; /* Ensure spacing in print */
+            }
+            
+            /* Don't hide the checkbox grid, just the unchecked items */
+            .checkbox-grid {
+                display: block !important;
+            }
+
+            /* Ensure grid layouts are respected */
+            .print-grid {
+                display: grid !important;
+            }
+
+            h1, h2, h3 {
+                color: #000 !important;
+            }
+        }
+
+        /* Add Inter font from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    </style>
+</head>
+<body class="font-sans bg-gray-100 text-gray-800">
+
+    <!-- Main Content Container -->
+    <div class="max-w-4xl mx-auto p-4 sm:p-8 bg-white shadow-lg rounded-lg my-8 print-container">
+
+        <!-- Header -->
+        <header class="border-b border-gray-200 pb-6 mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-teal-800">Interactive Career Planner</h1>
+            <p class="mt-2 text-lg text-gray-600">Based on the "A quick guide to Career Planning" booklet.</p>
+            <p class="mt-4 text-gray-700">Fill in the sections below to reflect on your career path. When you are finished, click the "Print to PDF" button to save your answers.</p>
+            
+            <!-- Print Button -->
+            <button 
+                onclick="window.print()"
+                class="print-hidden mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h1v-4a1 1 0 011-1h10a1 1 0 011 1v4h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm-6 8a1 1 0 011-1h4a1 1 0 011 1v1a1 1 0 01-1 1H8a1 1 0 01-1-1v-1z" clip-rule="evenodd" />
+                </svg>
+                Print to PDF
+            </button>
+        </header>
+
+        <!-- Main Form Content -->
+        <main id="planner-form" class="space-y-12">
+
+            <!-- Section 1: Understand Yourself (from Page 5) -->
+            <section class="print-section">
+                <h2 class="text-2xl font-semibold text-teal-700 border-b border-teal-200 pb-2">1. Understand Yourself</h2>
+                <p class="mt-2 text-gray-600">Reflect on these four key areas and note down your top three for each.</p>
+                
+                <div class="mt-6 space-y-6">
+                    <!-- Skills & abilities -->
+                    <div>
+                        <label class="block text-lg font-medium text-gray-700">Skills & Abilities</label>
+                        <p class="text-sm text-gray-500 mb-2">What are you good at? (e.g., problem-solving, teamwork, writing)</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print-grid">
+                            <input type="text" placeholder="1." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="2." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="3." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                    </div>
+                    
+                    <!-- Interests -->
+                    <div>
+                        <label class="block text-lg font-medium text-gray-700">Interests</label>
+                        <p class="text-sm text-gray-500 mb-2">What do you enjoy? (e.g., subjects, hobbies, topics)</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print-grid">
+                            <input type="text" placeholder="1." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="2." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="3." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                    </div>
+
+                    <!-- Attributes -->
+                    <div>
+                        <label class="block text-lg font-medium text-gray-700">Attributes</label>
+                        <p class="text-sm text-gray-500 mb-2">What are your personal traits? (e.g., tactful, determined, energetic)</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print-grid">
+                            <input type="text" placeholder="1." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="2." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="3." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                    </div>
+
+                    <!-- Values -->
+                    <div>
+                        <label class="block text-lg font-medium text-gray-700">Values</label>
+                        <p class="text-sm text-gray-500 mb-2">What is important to you? (e.g., integrity, adventure, prestige)</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print-grid">
+                            <input type="text" placeholder="1." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="2." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="3." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Priorities (from Page 6) -->
+            <section class="print-section">
+                <h2 class="text-2xl font-semibold text-teal-700 border-b border-teal-200 pb-2">2. Your Priorities</h2>
+                <p class="mt-2 text-gray-600">Select what you want from work and what is important for your work-life satisfaction.</p>
+                
+                <!-- Checkbox Grid -->
+                <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 checkbox-grid">
+                    <!-- List of priorities converted to checkboxes -->
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="autonomy" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="autonomy" class="font-medium text-gray-700 cursor-pointer">Autonomy</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="contribution" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="contribution" class="font-medium text-gray-700 cursor-pointer">Contribution to society</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="benefits" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="benefits" class="font-medium text-gray-700 cursor-pointer">Benefits</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="career-potential" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="career-potential" class="font-medium text-gray-700 cursor-pointer">Career potential</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="culture" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="culture" class="font-medium text-gray-700 cursor-pointer">Culture</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="challenge" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="challenge" class="font-medium text-gray-700 cursor-pointer">Challenge</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="image" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="image" class="font-medium text-gray-700 cursor-pointer">Image</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="creativity" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="creativity" class="font-medium text-gray-700 cursor-pointer">Creativity</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="industry" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="industry" class="font-medium text-gray-700 cursor-pointer">Industry</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="leadership" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="leadership" class="font-medium text-gray-700 cursor-pointer">Leadership</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="location" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="location" class="font-medium text-gray-700 cursor-pointer">Location(s)</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="commute" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="commute" class="font-medium text-gray-700 cursor-pointer">Commute time/cost</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="flexible-working" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="flexible-working" class="font-medium text-gray-700 cursor-pointer">Flexible working</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="hours" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="hours" class="font-medium text-gray-700 cursor-pointer">Hours</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="salary" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="salary" class="font-medium text-gray-700 cursor-pointer">Salary</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="learn" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="learn" class="font-medium text-gray-700 cursor-pointer">Learn</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="staff-count" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="staff-count" class="font-medium text-gray-700 cursor-pointer">Number of staff</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="travel-req" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="travel-req" class="font-medium text-gray-700 cursor-pointer">Travel requirements</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="prestige" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="prestige" class="font-medium text-gray-700 cursor-pointer">Prestige/title</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="promotion" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="promotion" class="font-medium text-gray-700 cursor-pointer">Promotion</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="responsibility" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="responsibility" class="font-medium text-gray-700 cursor-pointer">Responsibility</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="travel" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="travel" class="font-medium text-gray-700 cursor-pointer">Travel</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="variety" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="variety" class="font-medium text-gray-700 cursor-pointer">Variety</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="performance" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="performance" class="font-medium text-gray-700 cursor-pointer">Performance</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="reputation" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="reputation" class="font-medium text-gray-700 cursor-pointer">Reputation</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="size" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="size" class="font-medium text-gray-700 cursor-pointer">Size</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="stability" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="stability" class="font-medium text-gray-700 cursor-pointer">Stability</label>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="values-org" name="priorities" type="checkbox" class="focus:ring-teal-500 h-4 w-4 text-teal-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="values-org" class="font-medium text-gray-700 cursor-pointer">Values (Organisation)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Priorities -->
+                <div class="mt-8">
+                    <label for="other-priorities" class="block text-lg font-medium text-gray-700">Other Priorities</label>
+                    <p class="text-sm text-gray-500 mb-2">Note down any other priorities that are important to you.</p>
+                    <textarea id="other-priorities" rows="4" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"></textarea>
+                </div>
+            </section>
+
+            <!-- Section 3: Identify Your Options (from Page 7) -->
+            <section class="print-section">
+                <h2 class="text-2xl font-semibold text-teal-700 border-b border-teal-200 pb-2">3. Identify Your Options</h2>
+                <p class="mt-2 text-gray-600">Think of three careers you would like to research further. Note down why, and anything you need to consider or do.</p>
+                <div class="mt-6 space-y-6">
+                    <div>
+                        <label for="option-1" class="block text-lg font-medium text-gray-700">Option 1: Career Idea & Reflection</label>
+                        <textarea id="option-1" rows="5" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="e.g., Career: Digital Marketer. Why: Creative and data-driven. To Do: Research online courses, connect with alumni on LinkedIn."></textarea>
+                    </div>
+                    <div>
+                        <label for="option-2" class="block text-lg font-medium text-gray-700">Option 2: Career Idea & Reflection</label>
+                        <textarea id="option-2" rows="5" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="e.g., Career: Primary School Teacher. Why: Making a difference. To Do: Look into PGCE requirements, volunteer at a local school."></textarea>
+                    </div>
+                    <div>
+                        <label for="option-3" class="block text-lg font-medium text-gray-700">Option 3: Career Idea & Reflection</label>
+                        <textarea id="option-3" rows="5" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="e.g., Career: Further Study (Master's). Why: Specialize in my field. To Do: Research programs and funding options."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Make a Plan (from Page 11) -->
+            <section class="print-section">
+                <h2 class="text-2xl font-semibold text-teal-700 border-b border-teal-200 pb-2">4. Make a Plan</h2>
+                <p class="mt-2 text-gray-600">Note down your ideas for career planning on the grid below.</p>
+                
+                <div class="mt-6">
+                    <!-- Grid Headers -->
+                    <div class="grid grid-cols-[2fr_1fr] gap-4 print-grid">
+                        <h3 class="text-lg font-semibold text-gray-800">Action</h3>
+                        <h3 class="text-lg font-semibold text-gray-800">By When</h3>
+                    </div>
+                    <!-- Grid Rows -->
+                    <div class="space-y-4 mt-4">
+                        <div class="grid grid-cols-[2fr_1fr] gap-4 print-grid">
+                            <input type="text" placeholder="e.g., Draft CV and send to careers service for review." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="e.g., Next Friday" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                         <div class="grid grid-cols-[2fr_1fr] gap-4 print-grid">
+                            <input type="text" placeholder="e.g., Research 5 companies in my target industry." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="e.g., End of this month" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                         <div class="grid grid-cols-[2fr_1fr] gap-4 print-grid">
+                            <input type="text" placeholder="e.g., Find and contact 3 alumni on LinkedIn for advice." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="e.g., Next 2 weeks" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                         <div class="grid grid-cols-[2fr_1fr] gap-4 print-grid">
+                            <input type="text" placeholder="e.g., Apply for 3 internships or graduate roles." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="e.g., Before Christmas" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                         <div class="grid grid-cols-[2fr_1fr] gap-4 print-grid">
+                            <input type="text" placeholder="e.g., Practice interview questions with a friend." class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <input type="text" placeholder="e.g., Ongoing" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: General Notes (from Pages 13-15) -->
+            <section class="print-section">
+                <h2 class="text-2xl font-semibold text-teal-700 border-b border-teal-200 pb-2">5. General Notes</h2>
+                <p class="mt-2 text-gray-600">Use this space for any other thoughts, ideas, or reflections.</p>
+                <div class="mt-6">
+                    <textarea rows="10" class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="Write any additional notes here..."></textarea>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer with repeat Print Button -->
+        <footer class="mt-12 pt-8 border-t border-gray-200 text-center">
+            <button 
+                onclick="window.print()"
+                class="print-hidden inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v6a2 2 0 002 2h1v-4a1 1 0 011-1h10a1 1 0 011 1v4h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm-6 8a1 1 0 011-1h4a1 1 0 011 1v1a1 1 0 01-1 1H8a1 1 0 01-1-1v-1z" clip-rule="evenodd" />
+                </svg>
+                Print to PDF
+            </button>
+            <p class="mt-4 text-sm text-gray-500">Your content is saved in your browser. Printing to PDF is the best way to save it permanently.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
+
